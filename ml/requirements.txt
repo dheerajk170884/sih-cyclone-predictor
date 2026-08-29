@@ -8,5 +8,4 @@ matplotlib
 scikit-learn
 timm
 albumentations
-fastapi
-uvicorn
+flask

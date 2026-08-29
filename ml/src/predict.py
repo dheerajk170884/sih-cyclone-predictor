@@ -4,8 +4,7 @@ import torch.nn as nn
 from PIL import Image
 from torchvision import transforms
 import timm
-from fastapi import FastAPI, File, UploadFile
-import uvicorn
+from flask import Flask, request, jsonify
 
 # IMD Cyclone Categories
 CATEGORIES = [
@@ -17,7 +16,7 @@ CATEGORIES = [
     "Super Cyclonic Storm (>=222 km/h)"
 ]
 
-app = FastAPI(title="SIH Cyclone Intensity Predictor API")
+app = Flask(__name__)
 
 # Model Definition
 class CycloneIntensityClassifier(nn.Module):
@@ -38,13 +37,17 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-@app.get("/")
+@app.route("/", methods=["GET"])
 def home():
-    return {"status": "ML Cyclone Prediction Service Active"}
+    return jsonify({"status": "ML Cyclone Prediction Service Active (Flask)"})
 
-@app.post("/predict")
-async def predict_cyclone(file: UploadFile = File(...)):
-    image_bytes = await file.read()
+@app.route("/predict", methods=["POST"])
+def predict_cyclone():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+    
+    file = request.files['file']
+    image_bytes = file.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     
     input_tensor = transform(image).unsqueeze(0).to(device)
@@ -55,11 +58,11 @@ async def predict_cyclone(file: UploadFile = File(...)):
         predicted_class_id = torch.argmax(probabilities).item()
         confidence = float(probabilities[predicted_class_id].item())
         
-    return {
+    return jsonify({
         "predicted_category": CATEGORIES[predicted_class_id],
         "category_id": predicted_class_id,
         "confidence": round(confidence * 100, 2)
-    }
+    })
 
 if __name__ == "__main__":
-    uvicorn.run("predict:app", host="0.0.0.0", port=8000, reload=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
