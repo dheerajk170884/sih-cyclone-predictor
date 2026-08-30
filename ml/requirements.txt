@@ -1,11 +1,8 @@
-torch
-torchvision
-torchaudio
+tensorflow
 numpy
 pandas
 opencv-python
 matplotlib
 scikit-learn
-timm
-albumentations
+pillow
 flask

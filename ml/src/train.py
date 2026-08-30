@@ -1,31 +1,42 @@
-import torch
-import torch.nn as nn
-from torchvision import models, transforms
-from torch.utils.data import DataLoader
-import timm
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import tensorflow as tf
+from tensorflow import keras
+from keras import layers, models
+from keras.applications import EfficientNetB0
 
-# Pretrained EfficientNet Backbone
-class CycloneIntensityClassifier(nn.Module):
-    def __init__(self, num_classes=6):
-        super(CycloneIntensityClassifier, self).__init__()
-        # EfficientNet-B0 pretrained
-        self.backbone = timm.create_model('efficientnet_b0', pretrained=True, num_classes=num_classes)
+# Constants
+IMG_SIZE = (224, 224)
+NUM_CLASSES = 6
+BATCH_SIZE = 32
 
-    def forward(self, x):
-        return self.backbone(x)
+def build_cyclone_model(num_classes=NUM_CLASSES):
+    # Pretrained EfficientNetB0 backbone
+    base_model = EfficientNetB0(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+    base_model.trainable = False  # Fine-tuning ke liye freeze rakhein initially
 
-def get_transforms():
-    train_transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomRotation(15),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
-    return train_transform
+    # Classification Head
+    x = base_model.output
+    x = layers.GlobalAveragePooling2D()(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Dropout(0.3)(x)
+    x = layers.Dense(128, activation='relu')(x)
+    predictions = layers.Dense(num_classes, activation='softmax')(x)
+
+    model = models.Model(inputs=base_model.input, outputs=predictions)
+    
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    return model
 
 if __name__ == "__main__":
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = CycloneIntensityClassifier(num_classes=6).to(device)
-    print(f"Cyclone Intensity Model initialized successfully on: {device}")
+    model = build_cyclone_model()
+    model.summary()
+    print("TensorFlow EfficientNet-B0 Model built successfully!")
     
+    # Model architecture save karne ke liye
+    model.save("../models/cyclone_model_baseline.keras")
+    print("Baseline model saved in models/ folder.")
