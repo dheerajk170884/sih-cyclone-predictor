@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignore heavy raw data and extracted images
+ml/data/*.h5
+ml/data/Identifier/*
+ml/data/Depression/*
+ml/data/Deep Depression/*
+ml/data/Cyclonic Storm/*
+ml/data/Severe Cyclonic Storm/*
+ml/data/Very Severe Cyclonic Storm/*
+ml/data/Super Cyclonic Storm/*
+
+# Allow models to be pushed
+!ml/models/*.keras
