@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyclone Intelligence Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+ 
+  <aside class="sidebar">
+    <div class="brand">🌪️ Cyclone Intel</div>
+    <ul class="nav-list">
+      <li class="nav-item">Dashboard</li>
+      <li class="nav-item active">Live Map</li>
+      <li class="nav-item">Prediction</li>
+      <li class="nav-item">Analytics</li>
+      <li class="nav-item">Risk</li>
+      <li class="nav-item">Alerts</li>
+      <li class="nav-item">Settings</li>
+    </ul>
+  </aside>
+
+  <div class="main-wrapper">
+    <header>
+      <div class="header-actions">
+        <span>🔔 Alerts</span>
+        <span>👤 Admin</span>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <div class="title-banner">
+        <div>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">CURRENT CYCLONE</p>
+          <h1 style="font-size: 2rem; font-weight: 700;">Cyclone Amphan</h1>
+        </div>
+        <div class="status-badge">
+          <span>🔴</span> CRITICAL | CAT 4
+        </div>
+      </div>
+
+      <div class="grid-top">
+        <div class="card">
+          <div class="card-title">Live Tracking</div>
+          <div class="map-container">
+            <div class="cyclone-graphic">🌪️</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">AI Prediction</div>
+          <div class="metric-list">
+            <div class="metric-item">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Impact Probability</span>
+              <span class="metric-value" style="color: var(--accent-amber);">78%</span>
+            </div>
+            <div class="metric-item">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Max Sustained Wind</span>
+              <span class="metric-value">145 km/h</span>
+            </div>
+            <div class="metric-item">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Min Barometric Pressure</span>
+              <span class="metric-value">950 hPa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-bottom">
+        <div class="card">
+          <div class="card-title">Wind Speed Trend</div>
+          <canvas id="windChart" height="150"></canvas>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Pressure Drop</div>
+          <canvas id="pressureChart" height="150"></canvas>
+        </div>
+
+        <div class="card gauge-card">
+          <div class="card-title" style="width: 100%;">Risk Assessment</div>
+          <div class="gauge-val">HIGH</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
