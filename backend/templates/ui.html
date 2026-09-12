@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cyclone Intelligence Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
 </head>
 <body>
  
@@ -51,18 +51,22 @@
 
         <div class="card">
           <div class="card-title">AI Prediction</div>
+          <form id="predictionForm" class="prediction-form">
+            <button type="submit">Run demo prediction</button>
+            <p id="predictionMessage" role="status"></p>
+          </form>
           <div class="metric-list">
             <div class="metric-item">
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Impact Probability</span>
-              <span class="metric-value" style="color: var(--accent-amber);">78%</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Fused Wind Speed</span>
+              <span id="confidenceValue" class="metric-value" style="color: var(--accent-amber);">--</span>
             </div>
             <div class="metric-item">
               <span style="color: var(--text-muted); font-size: 0.85rem;">Max Sustained Wind</span>
-              <span class="metric-value">145 km/h</span>
+              <span id="categoryValue" class="metric-value">Awaiting data</span>
             </div>
             <div class="metric-item">
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Min Barometric Pressure</span>
-              <span class="metric-value">950 hPa</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Estimated Pressure Drop</span>
+              <span id="cycloneValue" class="metric-value">--</span>
             </div>
           </div>
         </div>
@@ -87,6 +91,6 @@
     </main>
   </div>
 
-  <script src="./script.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

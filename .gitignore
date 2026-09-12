@@ -227,5 +227,7 @@ ml/data/Severe Cyclonic Storm/*
 ml/data/Very Severe Cyclonic Storm/*
 ml/data/Super Cyclonic Storm/*
 
-# Allow models to be pushed
-!ml/models/*.keras
+#Ignore all model directories and their contents
+**/models/
+*.keras
+*.h5

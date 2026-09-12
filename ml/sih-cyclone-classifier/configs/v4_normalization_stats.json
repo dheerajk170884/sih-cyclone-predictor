@@ -1,0 +1,30 @@
+[
+  {
+    "channel": "IR1",
+    "median": 281.82999,
+    "p01": 208.84,
+    "p99": 296.66,
+    "scale_definition": "clip to [p01,p99], then linearly map to [-1,1]"
+  },
+  {
+    "channel": "WV",
+    "median": 240.05,
+    "p01": 208.57001,
+    "p99": 255.99001,
+    "scale_definition": "clip to [p01,p99], then linearly map to [-1,1]"
+  },
+  {
+    "channel": "VIS",
+    "median": 0.027000025,
+    "p01": 2.5262125e-08,
+    "p99": 0.71500003,
+    "scale_definition": "clip to [p01,p99], then linearly map to [-1,1]"
+  },
+  {
+    "channel": "PMW",
+    "median": 0.0,
+    "p01": 0.0,
+    "p99": 6.0493513,
+    "scale_definition": "clip to [p01,p99], then linearly map to [-1,1]"
+  }
+]

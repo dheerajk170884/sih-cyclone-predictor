@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.DS_Store
+*.log
+
+# Large model artifacts are best handled with Git LFS.
+# Uncomment these if you do not want regular Git to track Keras files:
+# models/*.keras
