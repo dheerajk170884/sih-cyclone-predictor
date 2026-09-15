@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cyclone Intelligence Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
 </head>
 <body>
  
   <aside class="sidebar">
-    <div class="brand">🌪️ Cyclone Intel</div>
+    <div class="brand">🌪️ Cyclone Info</div>
     <ul class="nav-list">
       <li class="nav-item">Dashboard</li>
       <li class="nav-item active">Live Map</li>
@@ -34,10 +36,7 @@
       <div class="title-banner">
         <div>
           <p style="color: var(--text-muted); font-size: 0.85rem;">CURRENT CYCLONE</p>
-          <h1 style="font-size: 2rem; font-weight: 700;">Cyclone Amphan</h1>
-        </div>
-        <div class="status-badge">
-          <span>🔴</span> CRITICAL | CAT 4
+          <h1 style="font-size: 2rem; font-weight: 700;">Cyclone</h1>
         </div>
       </div>
 
@@ -45,14 +44,22 @@
         <div class="card">
           <div class="card-title">Live Tracking</div>
           <div class="map-container">
-            <div class="cyclone-graphic">🌪️</div>
+            <div id="cycloneMap" aria-label="Cyclone track map"></div>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-title">AI Prediction</div>
+          <div class="card-title">Prediction</div>
           <form id="predictionForm" class="prediction-form">
-            <button type="submit">Run demo prediction</button>
+            <div class="upload-grid">
+              <label>Visible <input type="file" name="visible" accept="image/*"></label>
+              <label>Infrared <input type="file" name="infrared" accept="image/*"></label>
+              <label>Water vapour <input type="file" name="water_vapour" accept="image/*"></label>
+              <label class="track-upload">Cyclone track CSV <input type="file" name="track" accept=".csv,text/csv"></label>
+            </div>
+            <div class="prediction-actions">
+              <button type="submit">Run demo</button>
+            </div>
             <p id="predictionMessage" role="status"></p>
           </form>
           <div class="metric-list">
@@ -61,12 +68,16 @@
               <span id="confidenceValue" class="metric-value" style="color: var(--accent-amber);">--</span>
             </div>
             <div class="metric-item">
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Max Sustained Wind</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Intensity</span>
               <span id="categoryValue" class="metric-value">Awaiting data</span>
             </div>
             <div class="metric-item">
-              <span style="color: var(--text-muted); font-size: 0.85rem;">Estimated Pressure Drop</span>
-              <span id="cycloneValue" class="metric-value">--</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Predicted coordinates (After 3 hours)</span>
+              <span id="trackValue" class="metric-value">Awaiting track</span>
+            </div>
+            <div class="metric-item">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">Estimated Impact Area</span>
+              <span id="impactValue" class="metric-value">Awaiting cyclone</span>
             </div>
           </div>
         </div>
@@ -78,14 +89,14 @@
           <canvas id="windChart" height="150"></canvas>
         </div>
 
-        <div class="card">
-          <div class="card-title">Pressure Drop</div>
-          <canvas id="pressureChart" height="150"></canvas>
-        </div>
-
         <div class="card gauge-card">
           <div class="card-title" style="width: 100%;">Risk Assessment</div>
-          <div class="gauge-val">HIGH</div>
+          <div id="riskValue" class="gauge-val">Awaiting data</div>
+          <div class="risk-scale">
+            <div><strong>Class 0</strong><span>15–63 kt</span></div>
+            <div><strong>Class 1</strong><span>64–95 kt</span></div>
+            <div><strong>Class 2</strong><span>≥96 kt</span></div>
+          </div>
         </div>
       </div>
     </main>
